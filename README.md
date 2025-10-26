@@ -317,21 +317,49 @@ Dataset train menjadi memiliki dimensi:
 
 ### SVM
 
-Model utama yang digunakan adalah Support Vector Machine (SVM) dengan kernel linear.
-SVM bekerja dengan mencari hyperplane optimal yang memisahkan kelas secara maksimal dalam ruang fitur.
-Pemilihan kernel linear dilakukan karena fitur hasil transformasi dan seleksi memiliki representasi yang cukup linier.
+Support Vector Machine (SVM) adalah algoritma supervised learning yang digunakan untuk klasifikasi maupun regresi.
+Prinsip utamanya adalah mencari garis atau bidang pemisah terbaik (hyperplane) yang memaksimalkan jarak (margin) antara kelas yang berbeda.
 
-Parameter C dioptimasi menggunakan GridSearchCV untuk mengontrol trade-off antara margin dan kesalahan klasifikasi.
+SVM bekerja efektif pada data berdimensi tinggi dan tetap kuat terhadap outlier berkat penggunaan support vectors — titik data yang paling berpengaruh dalam menentukan batas keputusan.
+Dengan pemilihan kernel yang tepat, SVM juga mampu memetakan data non-linear ke ruang berdimensi lebih tinggi agar dapat dipisahkan dengan baik.
 
-class_weight='balanced' digunakan untuk mengatasi distribusi kelas yang tidak seimbang.
+### Modelling
 
-Model juga dikalibrasi menggunakan CalibratedClassifierCV agar probabilitas prediksi lebih akurat.
-Pendekatan ini menghasilkan model yang stabil, interpretatif, dan memiliki performa baik berdasarkan metrik ROC AUC dan F1-score.
+Untuk mendapatkan performa model SVM yang optimal, dilakukan hyperparameter tuning menggunakan GridSearchCV dengan cross-validation sebanyak 5 lipatan.
 
+- Parameter yang diuji adalah C, yaitu koefisien regularisasi yang mengontrol keseimbangan antara margin maximization dan misclassification error.
+- Proses pencarian menggunakan metrik ROC AUC sebagai dasar evaluasi agar model seimbang dalam mengenali kedua kelas.
+- Hasil pencarian menghasilkan kombinasi parameter terbaik (best_params_) dan nilai ROC AUC tertinggi (best_score_), yang kemudian digunakan sebagai model akhir (best_model).
 
+Hasilnya, GridSerachCV dengan 5 fold menghasilkan:
 
+- Best Parameter: C = 0.1
+- Best ROC AUC Score: 0.8771
 
+### Model Calibration and Evaluation
 
+Setelah model terbaik diperoleh dari hasil tuning, dilakukan proses kalibrasi probabilitas menggunakan CalibratedClassifierCV dengan metode isotonic regression.
+Langkah ini bertujuan agar nilai probabilitas yang dihasilkan model lebih akurat dan dapat diinterpretasikan dengan lebih baik.
+
+Selanjutnya, dilakukan:
+
+- Pencarian ambang batas optimal (threshold) berdasarkan F1-score untuk menyeimbangkan precision dan recall.
+- Evaluasi performa model menggunakan metrik ROC AUC dan classification report, baik untuk model terkalibrasi (val_proba) maupun hasil asli dari SVM (decision_function).
+- Hasil evaluasi menunjukkan bahwa kalibrasi membantu meningkatkan kualitas prediksi probabilistik dan stabilitas model dalam membedakan antara kelas positif dan negatif.
+
+Hasilnya:
+
+- Treshhold Optimal (based on F1): 0.712.
+- Precision / Recall / F1-score: Kelas 0 → 0.93 / 0.94 / 0.94, Kelas 1 → 0.69 / 0.63 / 0.66
+- Accuracy: 0.89
+- ROC AUC (calibrated): 0.854
+
+Jika menggunakan threshold default (0.5), performa sedikit berbeda:
+- Precision / Recall / F1-score: Kelas 0 → 0.95 / 0.84 / 0.89, Kelas 1 → 0.48 / 0.79 / 0.60
+- Accuracy: 0.83
+- ROC AUC: 0.851
+
+Hasil ini menunjukkan bahwa penyesuaian threshold meningkatkan keseimbangan F1-score pada kelas minoritas tanpa mengorbankan ROC AUC secara signifikan.
 
 
 
