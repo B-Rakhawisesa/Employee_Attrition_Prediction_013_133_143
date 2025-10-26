@@ -1,5 +1,5 @@
 # Laporan Project Machine Learning
-## Employee Attrition Prediction Using ... Classification Modelling
+## Employee Attrition Prediction Using SVM Classification Modelling
 
 **Hammam Maulana Arijudin - 5003231013**
 
