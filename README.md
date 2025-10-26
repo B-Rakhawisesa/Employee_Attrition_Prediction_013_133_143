@@ -22,31 +22,16 @@
   - [Exploratory Data Analysis (EDA)](#explaratory-data-analysis---deskripsi-variabel)
 - [Data Preparation](#data-preparation)
   - [Label Encoding](#1-label-encoding)
-  - [Splitting Dataset](#2-splitting-dataset)
-  - [Feature Engineering, Data Cleaning and Preprocessing](#3-feature-engineering-data-cleaning-and-preprocessing)
-- [Model Training, Comparison, Selection and Tuning](#model-training-comparison-selection-and-tuning)
-  - [Model Selection](#1-model-selection)
-  - [Feature Selection](#2-feature-selection)
-  - [Hyperparameter Tuning](#3-hyperparameter-tuning)
-- [Model Testing and Evaluation](#model-testing-and-evaluation)
-  - [Data Test Predict](#1-data-test-predict)
-  - [Best Model Evaluation](#2-best-model-evaluation)
-    - [Classification Report](#classification-report)
-    - [Advance Evaluation Methods](#advance-evaluation-methods)
-    - [Confusion Matrix](#confusion-matrix)
-    - [Plot ROC-AUC Curve](#plot-roc-auc-curve)
-    - [Plot PR-AUC Curve](#plot-pr-auc-curve)
-- [Save Best Model](#save-best-model)
-- [Model Interpretation](#model-interpretation)
-  - [Interpretation with SHAP Values](#1-interpretation-with-shap-values)
-  - [Feature Importance](#2-feature-importance)
-- [Financial Result](#financial-result)
-- [Conclusions](#conclusions)
-  - [Project Summary](#project-summary)
-  - [Result and Model Evaluation](#result-and-model-evaluation)
-  - [Handling Imbalanced Data](#handling-imbalanced-data)
-  - [Interpretation and Validation Model](#Interpretation-and-validation-model)
+  - [Drop Features]
+  - [Transformation]
+  - [Scaling and Encoding]
+  - [Feature Selection]
+  - [Splitting Dataset]
+  - [Handling Imbalanced Dataset]
+- [Modelling with Support Vector Machine]
+  - [SVM]
 
+  
 ---
 ## **Project Domain: Employment**
 Analisis employee attrition merupakan salah satu aspek penting dalam Human Resource (HR) Analytics, yaitu penerapan analisis data untuk memahami, mengukur, dan meningkatkan efektivitas sumber daya manusia di organisasi. [[1](https://www.talenta.co/blog/pengertian-hr-analytics/)]
@@ -277,28 +262,71 @@ Dalam dataset kali ini, label sudah berupa 0 / 1. Sehinggan tidak perlu dilakuka
 
 Dalam dataset ini, ada beberapa feature yang tidak memiliki variansi seperti 'EmployeeCount', 'StandardHours', 'Over18', dan feature unique feature seperti 'id', dan 'EmployeeNumber'. Kelima features ini tidak akan digunakan dalam analisis kali ini.
 
+### Transformation
+
+Beberapa fitur numerik pada dataset memiliki distribusi yang skewed (tidak simetris), ditandai dengan adanya outlier, yang dapat memengaruhi performa model terutama pada algoritma berbasis jarak seperti SVM.
+Untuk menormalkan distribusi tersebut, dilakukan logarithmic transformation (np.log1p) pada fitur-fitur dengan nilai skewness di atas ambang batas (skew_threshold = 1.0).
+Transformasi ini membantu mengurangi efek outlier dan membuat data lebih mendekati distribusi normal, sehingga proses pelatihan model menjadi lebih stabil dan akurat.
+Dalam analisis kali ini, beberapa features yang dilakukan transformasi logaritmik ialah: 'MonthlyIncome', 'PerformanceRating', 'TotalWorkingYears', 'YearsAtCompany', 'YearsSinceLastPromotion'
+
+### Scaling and Encoding
+
+Tahap ini dilakukan untuk memastikan seluruh fitur memiliki skala dan format yang sesuai sebelum masuk ke model:
+
+- StandardScaler digunakan untuk menstandarkan fitur numerik (num_cols) agar memiliki mean = 0 dan standard deviation = 1, sehingga model tidak bias terhadap fitur dengan rentang nilai besar.
+- OneHotEncoder diterapkan pada fitur kategorikal (cat_cols) untuk mengubah nilai kategori menjadi representasi biner (0/1).
+Encoder juga diatur dengan handle_unknown='ignore' agar dapat menangani kategori baru pada data uji tanpa error.
+- Hasil dari kedua transformasi ini kemudian digabungkan kembali menjadi satu dataset (X) yang siap digunakan untuk pelatihan model.
+
+### Feature Se;ection
+
+Proses feature selection dilakukan menggunakan Logistic Regression dengan regularisasi L1 (Lasso).
+Pendekatan ini membantu menghilangkan fitur yang tidak relevan dengan memberikan bobot nol pada koefisien yang kurang berkontribusi terhadap prediksi.
+
+- Parameter class_weight='balanced' digunakan untuk menangani ketidakseimbangan kelas.
+- Hanya fitur dengan bobot penting di atas nilai median (threshold='median') yang dipertahankan.
+- Hasilnya adalah subset fitur yang lebih informatif (selected_features), sehingga model menjadi lebih efisien dan berpotensi meningkatkan performa generalisasi.
+
+Hasil akhirnya, didapatkan reduksi feature hingga menjadi **26 features**, yaitu: 'DistanceFromHome', 'EnvironmentSatisfaction', 'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome', 'NumCompaniesWorked', 'RelationshipSatisfaction', 'StockOptionLevel', 'TotalWorkingYears', 'YearsSinceLastPromotion', 'BusinessTravel_Non-Travel', 'BusinessTravel_Travel_Frequently', 'Department_Research & Development', 'Department_Sales', 'EducationField_Human Resources', 'EducationField_Other', 'EducationField_Technical Degree', 'Gender_Female', 'JobRole_Laboratory Technician', 'JobRole_Research Director', 'JobRole_Sales Representative', 'MaritalStatus_Divorced', 'MaritalStatus_Single', 'OverTime_No', 'OverTime_Yes'
+
 ### Splitting Dataset
 
 - Menetapkan `stratify = y` sehingga fungsi train_test_split memastikan bahwa proses pemisahan mempertahankan persentase yang sama dari setiap kelas target di set train dan test.
 
-Dataset yang digunakan dalam analisis ini terdiri dari data pelatihan (train) dan data pengujian (test) dengan rpoprosi data test 30% dari total dataset dengan rincian sebagai berikut:
+Dataset yang digunakan dalam analisis ini terdiri dari data pelatihan (train) dan data pengujian (test) dengan rpoprosi data test 20% dari total dataset dengan rincian sebagai berikut:
 
-- **Ukuran data fitur (train)**: 823 observasi dengan 35 fitur.
-- **Ukuran data target (train)**: 823 observasi.
-- **Ukuran data fitur (test)**: 353 observasi dengan 35 fitur.
-- **Ukuran data target (test)**: 353 observasi.
+- **Ukuran data fitur (train)**: 940 observasi dengan 26 fitur.
+- **Ukuran data target (train)**: 940 observasi.
+- **Ukuran data fitur (test)**: 236 observasi dengan 26 fitur.
+- **Ukuran data target (test)**: 236 observasi.
 
+### Handling Imbalanced Dataset
 
-### Feature Engineering, Data Cleaning, and Preprocessing
+Dataset memiliki distribusi kelas yang tidak seimbang, sehingga dilakukan penyeimbangan menggunakan SMOTE-Tomek.
 
-Preprocessing untuk Model Support Vector Machine
-- **Secara Umum:** <br/>
-Menghapus data duplikasi, dan hapus/imputasi missing value.
-- **Fitur Numerik**: <br/>
+- SMOTE (Synthetic Minority Oversampling Technique) menghasilkan sampel sintetis untuk kelas minoritas agar proporsi kelas lebih seimbang.
+- Tomek Links kemudian digunakan untuk menghapus pasangan sampel yang terlalu berdekatan antar kelas, membantu memperjelas batas keputusan (decision boundary).
+Hasilnya (X_train_res, y_train_res) merupakan dataset pelatihan yang lebih seimbang dan bersih, sehingga model dapat belajar dengan lebih adil terhadap kedua kelas.
 
+Dataset train menjadi memiliki dimensi:
 
+- **Ukuran data fitur (X_train_res)**: 1574 observasi dengan 26 fitur.
+- **Ukuran data target (y_train_res)**: 1574 observasi.
 
+## Modelling with Support Vector Machine
 
+### SVM
+
+Model utama yang digunakan adalah Support Vector Machine (SVM) dengan kernel linear.
+SVM bekerja dengan mencari hyperplane optimal yang memisahkan kelas secara maksimal dalam ruang fitur.
+Pemilihan kernel linear dilakukan karena fitur hasil transformasi dan seleksi memiliki representasi yang cukup linier.
+
+Parameter C dioptimasi menggunakan GridSearchCV untuk mengontrol trade-off antara margin dan kesalahan klasifikasi.
+
+class_weight='balanced' digunakan untuk mengatasi distribusi kelas yang tidak seimbang.
+
+Model juga dikalibrasi menggunakan CalibratedClassifierCV agar probabilitas prediksi lebih akurat.
+Pendekatan ini menghasilkan model yang stabil, interpretatif, dan memiliki performa baik berdasarkan metrik ROC AUC dan F1-score.
 
 
 
