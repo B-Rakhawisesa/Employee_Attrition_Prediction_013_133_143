@@ -360,7 +360,7 @@ Hasilnya:
 - Accuracy: 0.89
 - ROC AUC (calibrated): 0.854
 
-Jika menggunakan threshold default (0.5), performa sedikit berbeda:
+Jika menggunakan threshold default (0.5):
 - Precision / Recall / F1-score: Kelas 0 → 0.95 / 0.84 / 0.89, Kelas 1 → 0.48 / 0.79 / 0.60
 - Accuracy: 0.83
 - ROC AUC: 0.851
