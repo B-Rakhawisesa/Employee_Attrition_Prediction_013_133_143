@@ -266,7 +266,7 @@ Dalam dataset kali ini, label sudah berupa 0 / 1. Sehinggan tidak perlu dilakuka
 
 ### Drop Features
 
-Dalam dataset ini, ada beberapa feature yang tidak memiliki variansi seperti 'EmployeeCount', 'StandardHours', 'Over18', dan feature unique feature seperti 'id', dan 'EmployeeNumber'. Kelima features ini tidak akan digunakan dalam analisis kali ini.
+Dalam dataset ini, ada beberapa feature yang tidak memiliki variansi seperti 'EmployeeCount', 'StandardHours', 'Over18', dan unique feature seperti 'id', dan 'EmployeeNumber'. Kelima features ini tidak akan digunakan dalam analisis kali ini.
 
 ### Transformation
 
