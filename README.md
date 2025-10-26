@@ -21,15 +21,17 @@
   - [Feature Description](#feature-description)
   - [Exploratory Data Analysis (EDA)](#explaratory-data-analysis---deskripsi-variabel)
 - [Data Preparation](#data-preparation)
-  - [Label Encoding](#1-label-encoding)
-  - [Drop Features]
-  - [Transformation]
-  - [Scaling and Encoding]
-  - [Feature Selection]
-  - [Splitting Dataset]
-  - [Handling Imbalanced Dataset]
-- [Modelling with Support Vector Machine]
-  - [SVM]
+  - [Label Encoding](#label-encoding)
+  - [Drop Features](#drop-features)
+  - [Transformation](#transformation)
+  - [Scaling and Encoding](#scaling-annd-encoding)
+  - [Feature Selection](#features-selection)
+  - [Splitting Dataset](#splitting-dataset)
+  - [Handling Imbalanced Dataset](#handling-imbalanced-dataset)
+- [Modelling with Support Vector Machine](#modelling-with-support-vector-machine)
+  - [SVM](#svm)
+  - [Modelling](#modelling)
+  - [Model Calbiration and Evaluation](#model-calibration-and-evaluation)
 
   
 ---
@@ -42,7 +44,7 @@ Faktor-faktor yang memengaruhi attrition dapat mencakup kepuasan kerja, beban ke
 Dengan memahami variabel-variabel ini secara kuantitatif, organisasi dapat mengidentifikasi karyawan dengan risiko tinggi untuk keluar dan merancang strategi retensi yang lebih efektif.
 
 
-**References:**
+### **References**
 
 [1] Talenta (2023). *Pengertian HR Analytics: Fungsi, Manfaat, dan Contohnya*. Retrieved from [https://www.talenta.co](https://www.talenta.co/blog/pengertian-hr-analytics/)
 
