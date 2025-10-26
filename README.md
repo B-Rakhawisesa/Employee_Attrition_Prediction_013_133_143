@@ -417,19 +417,26 @@ Selain itu, penerapan optimasi threshold berdasarkan nilai F1-score (0.706) memb
 
 Model diinterpretasikan menggunakan dua pendekatan:
 
-1. Analisis Koefisien (Feature Importance) dari model Logistic Regression, yang digunakan untuk memahami arah dan kekuatan pengaruh tiap fitur terhadap variabel attrition. Fitur dengan koefisien positif menunjukkan peningkatan risiko keluar, sedangkan nilai negatif menandakan penurunan risiko.Faktor paling berpengaruh antara lain:
+1. Analisis Koefisien (Feature Importance) dari model Logistic Regression, yang digunakan untuk memahami arah dan kekuatan pengaruh tiap fitur terhadap variabel attrition. Fitur dengan koefisien positif menunjukkan peningkatan risiko keluar, sedangkan nilai negatif menandakan penurunan risiko. Faktor paling berpengaruh antara lain:
  - JobRole_Laboratory Technician dan BusinessTravel_Travel_Frequently (meningkatkan risiko attrition)
  - BusinessTravel_Non-Travel dan Overtime_No (menurunkan risiko attrition)
 
-2. Hasil interpretasi menggunakan SHAP (SHapley Additive Explanations) pada model SVM kernel linear menunjukkan fitur-fitur yang paling berpengaruh terhadap prediksi attrition. Setiap titik merepresentasikan satu observasi, dengan warna merah menandakan nilai fitur tinggi dan biru nilai fitur rendah. Nilai SHAP positif berarti fitur tersebut meningkatkan probabilitas attrition, sementara nilai negatif menurunkannya.
-
- Beberapa fitur utama yang terbukti paling berpengaruh antara lain:
-
+2. Hasil interpretasi menggunakan SHAP (SHapley Additive Explanations) pada model SVM kernel linear menunjukkan fitur-fitur yang paling berpengaruh terhadap prediksi attrition. Setiap titik merepresentasikan satu observasi, dengan warna merah menandakan nilai fitur tinggi dan biru nilai fitur rendah. Nilai SHAP positif berarti fitur tersebut meningkatkan probabilitas attrition, sementara nilai negatif menurunkannya. Faktor paling berpengaruh antara lain:
  - TotalWorkingYears dan NumCompaniesWorked → nilai tinggi cenderung menurunkan risiko attrition, menunjukkan bahwa karyawan dengan pengalaman kerja panjang lebih stabil.
  - OverTime_Yes dan BusinessTravel_Travel_Frequently → nilai tinggi meningkatkan risiko attrition, menandakan bahwa intensitas kerja dan mobilitas tinggi dapat memicu kelelahan atau ketidakpuasan.
  - RelationshipSatisfaction dan JobSatisfaction → nilai rendah berasosiasi dengan peningkatan risiko keluar, mempertegas pentingnya faktor kepuasan kerja.
  - JobRole_Laboratory Technician dan Department_Research & Development → berkontribusi positif terhadap kemungkinan attrition, konsisten dengan hasil model logistik sebelumnya.
  - BusinessTravel_Non-Travel dan OverTime_No → berpengaruh negatif terhadap attrition, menunjukkan kecenderungan bertahan lebih lama di perusahaan.
 
- Secara keseluruhan, hasil SHAP ini memperkuat temuan dari model Logistic Regression bahwa faktor intensitas kerja, mobilitas, dan kepuasan kerja merupakan pendorong utama terjadinya attrition.
+Secara keseluruhan, hasil SHAP ini memperkuat temuan dari model Logistic Regression bahwa faktor intensitas kerja, mobilitas, dan kepuasan kerja merupakan pendorong utama terjadinya attrition.
 
+### Next Step
+
+Tahap pengembangan berikutnya difokuskan pada:
+
+- Integrasi model ke dalam sistem HR untuk memberikan peringatan dini terhadap potensi attrition.
+- Penerapan monitoring performa model secara berkala guna menjaga stabilitas akurasi seiring waktu.
+- Eksperimen dengan model interpretatif lanjutan seperti LIME atau SHAP summary global untuk memperluas pemahaman manajemen terhadap pola attrition.
+- Penerapan hasil model dalam kebijakan retensi nyata, misalnya melalui intervensi pada karyawan dengan risiko tinggi.
+
+Dengan langkah-langkah ini, proyek diharapkan dapat memberikan manfaat strategis yang berkelanjutan bagi perusahaan dalam mengurangi tingkat attrition dan meningkatkan kepuasan karyawan.
