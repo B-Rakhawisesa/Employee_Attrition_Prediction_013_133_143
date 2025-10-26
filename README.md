@@ -37,7 +37,7 @@
 - [Conclussion](#conclussion)
   - [Project Summary](#project-summary)
   - [Result, and Model Evaluation](#result-and-model-evaluation)
-  - [Interpretation and Validation Model](#interpretation-and-model-validation)
+  - [Interpretation and Model Validation](#interpretation-and-model-validation)
   - [Next Step](#next-step)
   
 ---
@@ -398,11 +398,38 @@ Jika menggunakan threshold default (0.5):
 
 Hasil ini menunjukkan bahwa penyesuaian threshold meningkatkan keseimbangan F1-score pada kelas minoritas tanpa mengorbankan ROC AUC secara signifikan.
 
+---
 
+## Conclussion
 
+### Project Summary
 
+Dalam project ini, telah dikembangkan sebuah model klasifikasi berbasis Support Vector Machine (SVM) dengan kernel linear untuk memprediksi probabilitas employee attrition (karyawan yang berpotensi keluar) di sebuah perusahaan. Tujuan utama dari pengembangan model ini adalah untuk menghasilkan prediksi yang akurat terhadap risiko attrition, mengidentifikasi faktor-faktor utama yang memengaruhi keputusan karyawan untuk meninggalkan perusahaan, serta menyusun rekomendasi berbasis data guna meningkatkan efektivitas strategi retensi. Dengan adanya sistem prediksi ini, pihak manajemen dapat mengambil langkah preventif secara lebih dini terhadap karyawan dengan risiko tinggi untuk keluar.
 
+### Result and Model Evaluation
 
+Permasalahan bisnis yang diangkat berhasil diselesaikan dengan baik melalui penerapan model SVM yang telah dioptimasi menggunakan GridSearchCV.
+Model terbaik diperoleh dengan parameter C = 0.1, menghasilkan skor ROC AUC sebesar 0.877 pada data pelatihan dan 0.851 pada data validasi.
+Hasil ini menunjukkan bahwa model mampu membedakan secara efektif antara karyawan yang berisiko tinggi keluar dan yang cenderung bertahan.
+Selain itu, penerapan optimasi threshold berdasarkan nilai F1-score (0.706) memberikan keseimbangan yang baik antara precision dan recall pada kelas minoritas (attrition).
 
+### Interpretation and Model Validation
 
+Model diinterpretasikan menggunakan dua pendekatan:
+
+1. Analisis Koefisien (Feature Importance) dari model Logistic Regression, yang digunakan untuk memahami arah dan kekuatan pengaruh tiap fitur terhadap variabel attrition. Fitur dengan koefisien positif menunjukkan peningkatan risiko keluar, sedangkan nilai negatif menandakan penurunan risiko.Faktor paling berpengaruh antara lain:
+ - JobRole_Laboratory Technician dan BusinessTravel_Travel_Frequently (meningkatkan risiko attrition)
+ - BusinessTravel_Non-Travel dan Overtime_No (menurunkan risiko attrition)
+
+2. Hasil interpretasi menggunakan SHAP (SHapley Additive Explanations) pada model SVM kernel linear menunjukkan fitur-fitur yang paling berpengaruh terhadap prediksi attrition. Setiap titik merepresentasikan satu observasi, dengan warna merah menandakan nilai fitur tinggi dan biru nilai fitur rendah. Nilai SHAP positif berarti fitur tersebut meningkatkan probabilitas attrition, sementara nilai negatif menurunkannya.
+
+ Beberapa fitur utama yang terbukti paling berpengaruh antara lain:
+
+ - TotalWorkingYears dan NumCompaniesWorked → nilai tinggi cenderung menurunkan risiko attrition, menunjukkan bahwa karyawan dengan pengalaman kerja panjang lebih stabil.
+ - OverTime_Yes dan BusinessTravel_Travel_Frequently → nilai tinggi meningkatkan risiko attrition, menandakan bahwa intensitas kerja dan mobilitas tinggi dapat memicu kelelahan atau ketidakpuasan.
+ - RelationshipSatisfaction dan JobSatisfaction → nilai rendah berasosiasi dengan peningkatan risiko keluar, mempertegas pentingnya faktor kepuasan kerja.
+ - JobRole_Laboratory Technician dan Department_Research & Development → berkontribusi positif terhadap kemungkinan attrition, konsisten dengan hasil model logistik sebelumnya.
+ - BusinessTravel_Non-Travel dan OverTime_No → berpengaruh negatif terhadap attrition, menunjukkan kecenderungan bertahan lebih lama di perusahaan.
+
+ Secara keseluruhan, hasil SHAP ini memperkuat temuan dari model Logistic Regression bahwa faktor intensitas kerja, mobilitas, dan kepuasan kerja merupakan pendorong utama terjadinya attrition.
 
