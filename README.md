@@ -19,7 +19,9 @@
 - [Data Understanding](#data-understanding)
   - [Data Source](#data-source)
   - [Feature Description](#feature-description)
-  - [Exploratory Data Analysis (EDA)](#explaratory-data-analysis---deskripsi-variabel)
+  - [Exploratory Data Analysis (EDA)](#explaratory-data-analysis)
+    - [Duplicates, Missing Values, and Outliers](#duplicates-missing-values-and-outliers)
+    - [Feature Importance](#feature-importance)
 - [Data Preparation](#data-preparation)
   - [Label Encoding](#label-encoding)
   - [Drop Features](#drop-features)
@@ -250,6 +252,35 @@ Selanjutnya, dilakukan deteksi **outlier** menggunakan metode **Interquartile Ra
 
 Meskipun demikian, outlier **tidak dihapus** dari dataset. Hal ini dilakukan untuk menjaga **keutuhan informasi**, mengingat data pencilan tersebut mencerminkan kondisi nyata. Menghilangkan outlier justru berisiko menghilangkan pola penting dalam konteks analisis attrition employee.
 Sebagai langkah mitigasi terhadap pengaruh outlier, sebelum melakukan pemodelan machine learning, akan dilakukan _scalling_ feature numerik.
+
+#### Feature Importance
+
+Untuk mengetahui fitur mana yang paling berpengaruh terhadap Attrition, dilakukan analisis menggunakan Logistic Regression dengan regularisasi L1 (Lasso).
+Berdasarkan hasil model tersebut, fitur yang paling berpengaruh terhadap employee attrition adalah JobRole, BusinessTravel, dan OverTime.
+Variabel dengan koefisien positif menunjukkan peningkatan risiko karyawan untuk meninggalkan perusahaan (misalnya: Laboratory Technician, OverTime_Yes, Frequent Travel),
+sedangkan variabel dengan koefisien negatif menunjukkan kecenderungan untuk bertahan (misalnya: R&D Department, TotalWorkingYears, High Environment Satisfaction).
+
+Secara umum, model menunjukkan bahwa beban kerja berlebih, mobilitas tinggi, dan minimnya kepuasan kerja atau promosi menjadi faktor dominan dalam keputusan karyawan untuk resign.
+
+Lebih detail, 15 features yang paling berpengaruh diurutkan dan dijelaskan seperti sebagai berikut:
+
+| Rank | Feature                           | Coefficient | Interpretation                                                     |
+|------|-----------------------------------|-------------|--------------------------------------------------------------------|
+|   1  | JobRole_Laboratory Technician     |  **+1.099** | Posisi ini paling berpotensi tinggi mengalami attrition            |
+|   2  | BusinessTravel_Non-Travel         |  **−0.972** | Karyawan yang jarang bepergian cenderung bertahan lebih lama       |
+|   3  | OverTime_No                       |  **−0.928** | Tidak lembur menurunkan risiko attrition                           |
+|   4  | JobRole_Research Director         |  **−0.870** | Posisi senior ini memiliki loyalitas tinggi                        |
+|   5  | BusinessTravel_Travel_Frequently  |  **+0.719** | Frekuensi perjalanan tinggi meningkatkan kemungkinan attrition     |
+|   6  | OverTime_Yes                      |  **+0.649** | Lembur sering berhubungan dengan keinginan keluar                  |
+|   7  | TotalWorkingYears                 |  **−0.648** | Pengalaman kerja tinggi menurunkan peluang attrition               |
+|   8  | Department_Research & Development |  **−0.639** | Divisi R&D memiliki tingkat attrition rendah                       |
+|   9  | JobLevel                          |  **+0.565** | Level jabatan lebih tinggi sedikit meningkatkan risiko keluar      |
+|  10  | JobRole_Sales Representative      |  **+0.511** | Sales cenderung memiliki turnover lebih tinggi                     |
+|  11  | NumCompaniesWorked                |  **+0.509** | Semakin banyak perusahaan sebelumnya, semakin tinggi risiko keluar |
+|  12  | MonthlyIncome                     |  **−0.467** | Gaji lebih tinggi cenderung mempertahankan karyawan                |
+|  13  | MaritalStatus_Single              |  **+0.461** | Karyawan lajang lebih mungkin resign                               |
+|  14  | EnvironmentSatisfaction           |  **−0.416** | Kepuasan lingkungan kerja menurunkan risiko attrition              |
+|  15  | YearsSinceLastPromotion           |  **+0.392** | Semakin lama tidak promosi, semakin tinggi risiko keluar           |
 
 ---
 
